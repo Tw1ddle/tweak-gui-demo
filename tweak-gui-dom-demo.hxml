@@ -1,0 +1,11 @@
+-main Main
+
+-lib lazyprops
+-lib random
+
+-lib msignal
+-lib sure
+
+-D customdomrenderer
+
+-cp lib
