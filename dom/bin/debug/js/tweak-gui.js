@@ -37,110 +37,12 @@ Lambda.array = function(it) {
 	}
 	return a;
 };
-var SimpleEnum = { __ename__ : true, __constructs__ : ["AN_ENUM_ITEM","ANOTHER_ENUM_ITEM","YET_ANOTHER_ENUM_ITEM","ONE_MORE_ENUM_ITEM"] };
-SimpleEnum.AN_ENUM_ITEM = ["AN_ENUM_ITEM",0];
-SimpleEnum.AN_ENUM_ITEM.toString = $estr;
-SimpleEnum.AN_ENUM_ITEM.__enum__ = SimpleEnum;
-SimpleEnum.ANOTHER_ENUM_ITEM = ["ANOTHER_ENUM_ITEM",1];
-SimpleEnum.ANOTHER_ENUM_ITEM.toString = $estr;
-SimpleEnum.ANOTHER_ENUM_ITEM.__enum__ = SimpleEnum;
-SimpleEnum.YET_ANOTHER_ENUM_ITEM = ["YET_ANOTHER_ENUM_ITEM",2];
-SimpleEnum.YET_ANOTHER_ENUM_ITEM.toString = $estr;
-SimpleEnum.YET_ANOTHER_ENUM_ITEM.__enum__ = SimpleEnum;
-SimpleEnum.ONE_MORE_ENUM_ITEM = ["ONE_MORE_ENUM_ITEM",3];
-SimpleEnum.ONE_MORE_ENUM_ITEM.toString = $estr;
-SimpleEnum.ONE_MORE_ENUM_ITEM.__enum__ = SimpleEnum;
-SimpleEnum.__empty_constructs__ = [SimpleEnum.AN_ENUM_ITEM,SimpleEnum.ANOTHER_ENUM_ITEM,SimpleEnum.YET_ANOTHER_ENUM_ITEM,SimpleEnum.ONE_MORE_ENUM_ITEM];
-var ComplexEnum = { __ename__ : true, __constructs__ : ["AN_ENUM_ITEM","ANOTHER_ENUM_ITEM","YET_ANOTHER_ENUM_ITEM","ONE_MORE_ENUM_ITEM","AND_ONE_MORE_ENUM_ITEM"] };
-ComplexEnum.AN_ENUM_ITEM = ["AN_ENUM_ITEM",0];
-ComplexEnum.AN_ENUM_ITEM.toString = $estr;
-ComplexEnum.AN_ENUM_ITEM.__enum__ = ComplexEnum;
-ComplexEnum.ANOTHER_ENUM_ITEM = function(y,x) { var $x = ["ANOTHER_ENUM_ITEM",1,y,x]; $x.__enum__ = ComplexEnum; $x.toString = $estr; return $x; };
-ComplexEnum.YET_ANOTHER_ENUM_ITEM = function(x) { var $x = ["YET_ANOTHER_ENUM_ITEM",2,x]; $x.__enum__ = ComplexEnum; $x.toString = $estr; return $x; };
-ComplexEnum.ONE_MORE_ENUM_ITEM = function(w,x) { var $x = ["ONE_MORE_ENUM_ITEM",3,w,x]; $x.__enum__ = ComplexEnum; $x.toString = $estr; return $x; };
-ComplexEnum.AND_ONE_MORE_ENUM_ITEM = ["AND_ONE_MORE_ENUM_ITEM",4];
-ComplexEnum.AND_ONE_MORE_ENUM_ITEM.toString = $estr;
-ComplexEnum.AND_ONE_MORE_ENUM_ITEM.__enum__ = ComplexEnum;
-ComplexEnum.__empty_constructs__ = [ComplexEnum.AN_ENUM_ITEM,ComplexEnum.AND_ONE_MORE_ENUM_ITEM];
-var SimpleTestObject = function(my_boolean,my_integer,my_float,my_string,my_nullary_function) {
-	this.my_nullary_function = my_nullary_function;
-	this.my_string = my_string;
-	this.my_float = my_float;
-	this.my_integer = my_integer;
-	this.my_boolean = my_boolean;
-};
-SimpleTestObject.__name__ = true;
-SimpleTestObject.prototype = {
-	updateValues: function() {
-		if(Math.random() < 0.5) this.my_boolean = true; else this.my_boolean = false;
-		this.my_integer = Std["int"](Math.random() * 1000000 - 500000);
-		this.my_float = Math.random() * 2000000 - 100000;
-		this.my_string = Std.string("Random String: " + Math.random() * 500000);
-		this.my_nullary_function = function() {
-			console.log("Foo");
-		};
-	}
-	,__class__: SimpleTestObject
-};
-var ComplexTestObject = function(a_bool,b_bool,c_bool,x_int,y_int,z_int,x_float,y_float,z_float,a_string,b_string,c_string,nullary_function,unary_string_function,binary_int_int_function,ternary_int_object_string_function,simple_enum,complex_enum,enum_string_abstract,int_vector,string_vector,object_vector,int_array,string_array,object_array,simple_object,string_to_string_map,int_to_string_map,object_to_string_map,enum_to_string_map,string_stack,anonymous_type,balanced_tree) {
-	this.balanced_tree = balanced_tree;
-	this.anonymous_type = anonymous_type;
-	this.string_stack = string_stack;
-	this.enum_to_string_map = enum_to_string_map;
-	this.object_to_string_map = object_to_string_map;
-	this.int_to_string_map = int_to_string_map;
-	this.string_to_string_map = string_to_string_map;
-	this.simple_object = simple_object;
-	this.object_array = object_array;
-	this.string_array = string_array;
-	this.int_array = int_array;
-	this.object_vector = object_vector;
-	this.string_vector = string_vector;
-	this.int_vector = int_vector;
-	this.enum_string_abstract = enum_string_abstract;
-	this.complex_enum = complex_enum;
-	this.simple_enum = simple_enum;
-	this.ternary_int_object_string_function = ternary_int_object_string_function;
-	this.binary_int_int_function = binary_int_int_function;
-	this.unary_string_function = unary_string_function;
-	this.nullary_function = nullary_function;
-	this.c_string = c_string;
-	this.b_string = b_string;
-	this.a_string = a_string;
-	this.z_float = z_float;
-	this.y_float = y_float;
-	this.x_float = x_float;
-	this.z_int = z_int;
-	this.y_int = y_int;
-	this.x_int = x_int;
-	this.c_bool = c_bool;
-	this.b_bool = b_bool;
-	this.a_bool = a_bool;
-};
-ComplexTestObject.__name__ = true;
-ComplexTestObject.prototype = {
-	updateValues: function() {
-		this.a_bool = Math.random() < 0.5;
-		this.b_bool = Math.random() < 0.5;
-		this.c_bool = Math.random() < 0.5;
-		this.x_int = Math.floor(1000001 * Math.random());
-		this.y_int = -10 + Math.floor(21 * Math.random());
-		this.z_int = -1000000 + Math.floor(1000001 * Math.random());
-		this.x_float = 1000000 * Math.random();
-		this.y_float = -10 + 20 * Math.random();
-		this.z_float = -1000000 + 1000000 * Math.random();
-		this.a_string = Random.string(10,"aeiou");
-		this.b_string = Random.string(15);
-		this.c_string = Random.string(1);
-		this.simple_enum = Random.enumConstructor(SimpleEnum);
-		this.complex_enum = Random.enumConstructor(ComplexEnum);
-	}
-	,__class__: ComplexTestObject
-};
 var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
-	var gui = tweak_GUI.create("tweak.gui");
+	var basicTestObject = new SimpleTestObject(true,20,50.2,"Qux",function() {
+		console.log("Basic Test Function");
+	});
 	var simpleObjectArray = [];
 	var _g5 = 0;
 	while(_g5 < 5) {
@@ -162,10 +64,6 @@ Main.main = function() {
 	balancedTree.set(1,"Bar");
 	balancedTree.set(2,"Baz");
 	balancedTree.set(3,"Boz");
-	var basicFolder = gui.addFolder("Simple Example");
-	basicFolder.addObject(new SimpleTestObject(true,20,50.2,"Qux",function() {
-		console.log("Basic Test Function");
-	}));
 	var testObjectComplex = new ComplexTestObject(true,false,true,10,20,30,5.5,15.5,25.5,"Foo","Bar","Baz",function() {
 	},function(s) {
 		console.log("Running: " + s);
@@ -267,11 +165,12 @@ Main.main = function() {
 		$r = _g31;
 		return $r;
 	}(this)),stringStack,{ x : 10, y : 25},balancedTree);
+	var gui = tweak_GUI.create("tweak.gui");
+	var basicFolder = gui.addFolder("Simple Example").addObject(basicTestObject);
 	gui.addFolder("Manually Added Items").addFunction(testObjectComplex.nullary_function,"","Nullary Function").addFunction(testObjectComplex.unary_string_function,"s","Unary Function").addFunction(testObjectComplex.binary_int_int_function,"ii","Binary Function").addStringSelect(testObjectComplex,"a_string",testObjectComplex.string_array,"String Select").addEnumSelect(testObjectComplex,"simple_enum","Simple Enum Select").addEnumSelect(testObjectComplex,"complex_enum","Complex Enum Select").addBooleanCheckbox(testObjectComplex,"a_bool","Boolean Checkbox");
 	var folder = gui.addFolder("Automatic Complex Example").addObject(testObjectComplex);
 	var guiInfo = tweak_GUI.create("tweak.gui.info");
-	guiInfo.addFolderForObjectWatch(simpleObjectArray,"Simple Object Array Watch",10);
-	guiInfo.addFolderForObjectWatch(testObjectComplex,"Complex Object Watch",10);
+	guiInfo.addFolderForObjectWatch(simpleObjectArray,"Simple Object Array Watch",10).addFolderForObjectWatch(testObjectComplex,"Complex Object Watch",10);
 	var timer = new haxe_Timer(100);
 	timer.run = function() {
 		gui.update();
@@ -287,6 +186,106 @@ Main.main = function() {
 		}
 		testObjectComplex.updateValues();
 	};
+};
+var SimpleEnum = { __ename__ : true, __constructs__ : ["AN_ENUM_ITEM","ANOTHER_ENUM_ITEM","YET_ANOTHER_ENUM_ITEM","ONE_MORE_ENUM_ITEM"] };
+SimpleEnum.AN_ENUM_ITEM = ["AN_ENUM_ITEM",0];
+SimpleEnum.AN_ENUM_ITEM.toString = $estr;
+SimpleEnum.AN_ENUM_ITEM.__enum__ = SimpleEnum;
+SimpleEnum.ANOTHER_ENUM_ITEM = ["ANOTHER_ENUM_ITEM",1];
+SimpleEnum.ANOTHER_ENUM_ITEM.toString = $estr;
+SimpleEnum.ANOTHER_ENUM_ITEM.__enum__ = SimpleEnum;
+SimpleEnum.YET_ANOTHER_ENUM_ITEM = ["YET_ANOTHER_ENUM_ITEM",2];
+SimpleEnum.YET_ANOTHER_ENUM_ITEM.toString = $estr;
+SimpleEnum.YET_ANOTHER_ENUM_ITEM.__enum__ = SimpleEnum;
+SimpleEnum.ONE_MORE_ENUM_ITEM = ["ONE_MORE_ENUM_ITEM",3];
+SimpleEnum.ONE_MORE_ENUM_ITEM.toString = $estr;
+SimpleEnum.ONE_MORE_ENUM_ITEM.__enum__ = SimpleEnum;
+SimpleEnum.__empty_constructs__ = [SimpleEnum.AN_ENUM_ITEM,SimpleEnum.ANOTHER_ENUM_ITEM,SimpleEnum.YET_ANOTHER_ENUM_ITEM,SimpleEnum.ONE_MORE_ENUM_ITEM];
+var ComplexEnum = { __ename__ : true, __constructs__ : ["AN_ENUM_ITEM","ANOTHER_ENUM_ITEM","YET_ANOTHER_ENUM_ITEM","ONE_MORE_ENUM_ITEM","AND_ONE_MORE_ENUM_ITEM"] };
+ComplexEnum.AN_ENUM_ITEM = ["AN_ENUM_ITEM",0];
+ComplexEnum.AN_ENUM_ITEM.toString = $estr;
+ComplexEnum.AN_ENUM_ITEM.__enum__ = ComplexEnum;
+ComplexEnum.ANOTHER_ENUM_ITEM = function(y,x) { var $x = ["ANOTHER_ENUM_ITEM",1,y,x]; $x.__enum__ = ComplexEnum; $x.toString = $estr; return $x; };
+ComplexEnum.YET_ANOTHER_ENUM_ITEM = function(x) { var $x = ["YET_ANOTHER_ENUM_ITEM",2,x]; $x.__enum__ = ComplexEnum; $x.toString = $estr; return $x; };
+ComplexEnum.ONE_MORE_ENUM_ITEM = function(w,x) { var $x = ["ONE_MORE_ENUM_ITEM",3,w,x]; $x.__enum__ = ComplexEnum; $x.toString = $estr; return $x; };
+ComplexEnum.AND_ONE_MORE_ENUM_ITEM = ["AND_ONE_MORE_ENUM_ITEM",4];
+ComplexEnum.AND_ONE_MORE_ENUM_ITEM.toString = $estr;
+ComplexEnum.AND_ONE_MORE_ENUM_ITEM.__enum__ = ComplexEnum;
+ComplexEnum.__empty_constructs__ = [ComplexEnum.AN_ENUM_ITEM,ComplexEnum.AND_ONE_MORE_ENUM_ITEM];
+var SimpleTestObject = function(my_boolean,my_integer,my_float,my_string,my_nullary_function) {
+	this.my_nullary_function = my_nullary_function;
+	this.my_string = my_string;
+	this.my_float = my_float;
+	this.my_integer = my_integer;
+	this.my_boolean = my_boolean;
+};
+SimpleTestObject.__name__ = true;
+SimpleTestObject.prototype = {
+	updateValues: function() {
+		if(Math.random() < 0.5) this.my_boolean = true; else this.my_boolean = false;
+		this.my_integer = Std["int"](Math.random() * 1000000 - 500000);
+		this.my_float = Math.random() * 2000000 - 100000;
+		this.my_string = Std.string("Random String: " + Math.random() * 500000);
+		this.my_nullary_function = function() {
+			console.log("Foo");
+		};
+	}
+	,__class__: SimpleTestObject
+};
+var ComplexTestObject = function(a_bool,b_bool,c_bool,x_int,y_int,z_int,x_float,y_float,z_float,a_string,b_string,c_string,nullary_function,unary_string_function,binary_int_int_function,ternary_int_object_string_function,simple_enum,complex_enum,enum_string_abstract,int_vector,string_vector,object_vector,int_array,string_array,object_array,simple_object,string_to_string_map,int_to_string_map,object_to_string_map,enum_to_string_map,string_stack,anonymous_type,balanced_tree) {
+	this.balanced_tree = balanced_tree;
+	this.anonymous_type = anonymous_type;
+	this.string_stack = string_stack;
+	this.enum_to_string_map = enum_to_string_map;
+	this.object_to_string_map = object_to_string_map;
+	this.int_to_string_map = int_to_string_map;
+	this.string_to_string_map = string_to_string_map;
+	this.simple_object = simple_object;
+	this.object_array = object_array;
+	this.string_array = string_array;
+	this.int_array = int_array;
+	this.object_vector = object_vector;
+	this.string_vector = string_vector;
+	this.int_vector = int_vector;
+	this.enum_string_abstract = enum_string_abstract;
+	this.complex_enum = complex_enum;
+	this.simple_enum = simple_enum;
+	this.ternary_int_object_string_function = ternary_int_object_string_function;
+	this.binary_int_int_function = binary_int_int_function;
+	this.unary_string_function = unary_string_function;
+	this.nullary_function = nullary_function;
+	this.c_string = c_string;
+	this.b_string = b_string;
+	this.a_string = a_string;
+	this.z_float = z_float;
+	this.y_float = y_float;
+	this.x_float = x_float;
+	this.z_int = z_int;
+	this.y_int = y_int;
+	this.x_int = x_int;
+	this.c_bool = c_bool;
+	this.b_bool = b_bool;
+	this.a_bool = a_bool;
+};
+ComplexTestObject.__name__ = true;
+ComplexTestObject.prototype = {
+	updateValues: function() {
+		this.a_bool = Math.random() < 0.5;
+		this.b_bool = Math.random() < 0.5;
+		this.c_bool = Math.random() < 0.5;
+		this.x_int = Math.floor(1000001 * Math.random());
+		this.y_int = -10 + Math.floor(21 * Math.random());
+		this.z_int = -1000000 + Math.floor(1000001 * Math.random());
+		this.x_float = 1000000 * Math.random();
+		this.y_float = -10 + 20 * Math.random();
+		this.z_float = -1000000 + 1000000 * Math.random();
+		this.a_string = Random.string(10,"aeiou");
+		this.b_string = Random.string(15);
+		this.c_string = Random.string(1);
+		this.simple_enum = Random.enumConstructor(SimpleEnum);
+		this.complex_enum = Random.enumConstructor(ComplexEnum);
+	}
+	,__class__: ComplexTestObject
 };
 Math.__name__ = true;
 var Random = function() { };
@@ -381,9 +380,6 @@ Reflect.isEnumValue = function(v) {
 };
 var Std = function() { };
 Std.__name__ = true;
-Std["is"] = function(v,t) {
-	return js_Boot.__instanceof(v,t);
-};
 Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
 };
@@ -1044,6 +1040,9 @@ var tweak_elements_Folder = function(name,parent) {
 	this.properties = [];
 };
 tweak_elements_Folder.__name__ = true;
+tweak_elements_Folder.verifyField = function(object,field) {
+	return object != null && Object.prototype.hasOwnProperty.call(object,field);
+};
 tweak_elements_Folder.__super__ = tweak_elements_BaseElement;
 tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 	update: function() {
@@ -1088,9 +1087,10 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		if(!(name != null && name.length > 0)) throw new js__$Boot_HaxeError("FAIL: name != null && name.length > 0");
 		var folder = new tweak_elements_Folder(name,this);
 		this.folders.push(folder);
-		this.signal_didAddFolder.dispatch(this.parent,this);
-		var folder1 = this.backend.addFolder(folder);
-		return folder1;
+		var added = this.backend.addFolder(folder);
+		if(!added) throw new js__$Boot_HaxeError("FAIL: added");
+		if(added) this.signal_didAddFolder.dispatch(this.parent,this);
+		return folder;
 	}
 	,remove: function() {
 		if(this.parent != null) {
@@ -1139,7 +1139,7 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		return this;
 	}
 	,addBooleanCheckbox: function(object,field,name) {
-		if(!(Object.prototype.hasOwnProperty.call(object,field) && typeof(Reflect.getProperty(object,field)) == "boolean")) throw new js__$Boot_HaxeError("FAIL: Reflect.hasField(object, field) && Std.is(Reflect.getProperty(object, field), Bool)");
+		if(!(object != null && Object.prototype.hasOwnProperty.call(object,field))) throw new js__$Boot_HaxeError("FAIL: verifyField(object, field)");
 		this.backend.addBooleanCheckbox(this,this.makeProperty(object,field,name));
 		return this;
 	}
@@ -1148,12 +1148,12 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		return this;
 	}
 	,addEnumSelect: function(object,field,name) {
-		if(!(Object.prototype.hasOwnProperty.call(object,field) && Reflect.isEnumValue(Reflect.getProperty(object,field)))) throw new js__$Boot_HaxeError("FAIL: Reflect.hasField(object, field) && Reflect.isEnumValue(Reflect.getProperty(object, field))");
+		if(!(object != null && Object.prototype.hasOwnProperty.call(object,field))) throw new js__$Boot_HaxeError("FAIL: verifyField(object, field)");
 		this.backend.addEnumSelect(this,this.makeProperty(object,field,name));
 		return this;
 	}
 	,addStringSelect: function(object,field,options,name) {
-		if(!(Object.prototype.hasOwnProperty.call(object,field) && typeof(Reflect.getProperty(object,field)) == "string")) throw new js__$Boot_HaxeError("FAIL: Reflect.hasField(object, field) && Std.is(Reflect.getProperty(object, field), String)");
+		if(!(object != null && Object.prototype.hasOwnProperty.call(object,field))) throw new js__$Boot_HaxeError("FAIL: verifyField(object, field)");
 		this.backend.addStringSelect(this,this.makeProperty(object,field,name),options);
 		return this;
 	}
@@ -1161,20 +1161,20 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		return this;
 	}
 	,addNumericSlider: function(object,field,name,min,max) {
-		if(!(Object.prototype.hasOwnProperty.call(object,field) && (Std["is"](Reflect.getProperty(object,field),Int) || typeof(Reflect.getProperty(object,field)) == "number"))) throw new js__$Boot_HaxeError("FAIL: Reflect.hasField(object, field) && (Std.is(Reflect.getProperty(object, field), Int) || Std.is(Reflect.getProperty(object, field), Float))");
+		if(!(object != null && Object.prototype.hasOwnProperty.call(object,field))) throw new js__$Boot_HaxeError("FAIL: verifyField(object, field)");
 		if(min == null) min = -1e20;
 		if(max == null) max = 1e20;
 		this.backend.addNumericSlider(this,this.makeProperty(object,field,name),min,max);
 		return this;
 	}
 	,addNumericSpinbox: function(object,field,name) {
-		if(!(Object.prototype.hasOwnProperty.call(object,field) && (Std["is"](Reflect.getProperty(object,field),Int) || typeof(Reflect.getProperty(object,field)) == "number"))) throw new js__$Boot_HaxeError("FAIL: Reflect.hasField(object, field) && (Std.is(Reflect.getProperty(object, field), Int) || Std.is(Reflect.getProperty(object, field), Float))");
+		if(!(object != null && Object.prototype.hasOwnProperty.call(object,field))) throw new js__$Boot_HaxeError("FAIL: verifyField(object, field)");
 		this.backend.addNumericSpinbox(this,this.makeProperty(object,field,name));
 		return this;
 	}
 	,addStringEdit: function(object,field,name) {
 		if(!(object != null)) throw new js__$Boot_HaxeError("FAIL: object != null");
-		if(!(Object.prototype.hasOwnProperty.call(object,field) && typeof(Reflect.getProperty(object,field)) == "string")) throw new js__$Boot_HaxeError("FAIL: Reflect.hasField(object, field) && (Std.is(Reflect.getProperty(object, field), String))");
+		if(!(object != null && Object.prototype.hasOwnProperty.call(object,field))) throw new js__$Boot_HaxeError("FAIL: verifyField(object, field)");
 		this.backend.addStringEdit(this,this.makeProperty(object,field,name));
 		return this;
 	}
@@ -1194,7 +1194,7 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 	}
 	,addObject: function(object) {
 		if(!(object != null)) throw new js__$Boot_HaxeError("FAIL: object != null");
-		var fields = Reflect.fields(object);
+		var fields = this.getFields(object);
 		var _g = 0;
 		while(_g < fields.length) {
 			var field = fields[_g];
@@ -1215,7 +1215,7 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		if(!(object != null)) throw new js__$Boot_HaxeError("FAIL: object != null");
 		if(!(name != null && name.length > 0)) throw new js__$Boot_HaxeError("FAIL: name != null && name.length > 0");
 		if(!(history >= 0)) throw new js__$Boot_HaxeError("FAIL: history >= 0");
-		var fields = Reflect.fields(object);
+		var fields = this.getFields(object);
 		var _g = 0;
 		while(_g < fields.length) {
 			var field = fields[_g];
@@ -1270,6 +1270,10 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		this.properties.push(property);
 		this.signal_didAddProperty.dispatch(this,property);
 		return property;
+	}
+	,getFields: function(object) {
+		if(!(object != null)) throw new js__$Boot_HaxeError("FAIL: object != null");
+		return Reflect.fields(object);
 	}
 	,__class__: tweak_elements_Folder
 });
@@ -1356,7 +1360,7 @@ tweak_backend_dom_CustomDOMBackend.prototype = {
 			folderContainer.classList.toggle("collapsed");
 			folderToggle.classList.toggle("folder-open");
 		}
-		return folder;
+		return true;
 	}
 	,removeFolder: function(folder) {
 		var folderContainer = window.document.getElementById("tweak-gui-folder-container" + Std.string(_$UInt_UInt_$Impl_$.toFloat(folder.id)));

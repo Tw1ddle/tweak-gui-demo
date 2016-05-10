@@ -6,6 +6,6 @@
 -lib msignal
 -lib sure
 
--D customdomrenderer
+-D customdombackend
 
 -cp lib

@@ -1,3 +1,3 @@
-Demo of tweak-gui that uses the DOM.
+tweak-gui demos.
 
 WORK IN PROGRESS

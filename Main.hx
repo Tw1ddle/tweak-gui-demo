@@ -13,6 +13,97 @@ import tweak.GUI;
 import tweak.elements.Folder;
 import tweak.util.Util;
 
+// A cross-platform demo of tweak-gui
+class Main {
+    private static function main():Void {		
+		// Start by creating some objects to add to the GUI
+		// Create a single basic test object
+		var basicTestObject = new SimpleTestObject(true, 20, 50.2, "Qux", function () { trace("Basic Test Function"); });
+		
+		// Create an array of objects containing simple types
+		var simpleObjectArray = new Array<SimpleTestObject>();
+		for (i in 0...5) {
+			simpleObjectArray.push(new SimpleTestObject(false, Std.int(Math.random() * 10), Math.random() * 12, "Test", function() { trace("Basic Test Function" + i); }));
+		}
+		
+		// Create a string stack
+		var stringStack = new GenericStack<String>();
+		stringStack.add("Foo");
+		stringStack.add("Bar");
+		stringStack.add("Boz");
+		stringStack.add("Qux");
+		stringStack.add("Quux");
+		
+		// Create a balanced tree
+		var balancedTree = new BalancedTree<Int, String>();
+		balancedTree.set(0, "Foo");
+		balancedTree.set(1, "Bar");
+		balancedTree.set(2, "Baz");
+		balancedTree.set(3, "Boz");
+		
+		// Create a complex test object containing both primitive and object types
+		var testObjectComplex = new ComplexTestObject(
+			true, false, true,
+			10, 20, 30,
+			5.5, 15.5, 25.5,
+			"Foo", "Bar", "Baz",
+			function() {}, function(s:String):Void { trace("Running: " + s); }, function(a:Int, b:Int) { trace("Running: " + a + "," + b); }, function(a:Int, b:SimpleTestObject, c:String) { trace("Running: " + a + "," + b + "," + c); },
+			SimpleEnum.AN_ENUM_ITEM, ComplexEnum.AN_ENUM_ITEM, EnumAbstract.foo,
+			Vector.fromArrayCopy([ 0, 1, 2, 3 ]), Vector.fromArrayCopy([ "Foo", "Bar", "Baz", "Boz" ]), Vector.fromArrayCopy(simpleObjectArray),
+			[ 0, 1, 2, 3 ], [ "Foo", "Bar", "Baz", "Boz" ], simpleObjectArray,
+			new SimpleTestObject(false, 20, 30, "Nested Test", function() { trace("Nested test"); } ),
+			[ "Foo" => "Bar", "Boz" => "Baz", "Qux" => "Quux", "Quuux" => "Quuuux", "LongString" => "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789" ],
+			[ 1 => "Foo", 2 => "Bar", 3 => "Boz", -23 => "Qux"],
+			[ simpleObjectArray[0] => "Foo", simpleObjectArray[1] => "Bar", simpleObjectArray[2] => "Baz" ],
+			[ SimpleEnum.AN_ENUM_ITEM => "Foo", SimpleEnum.ANOTHER_ENUM_ITEM => "Bar", SimpleEnum.ONE_MORE_ENUM_ITEM => "Boz" ],
+			stringStack,
+			{ x: 10, y: 25 },
+			balancedTree
+		);
+			
+		// Create the main GUI itself
+		var gui = GUI.create("tweak.gui");
+		
+		// Add a folder with a single simple object
+		var basicFolder = gui.addFolder("Simple Example")
+		.addObject(basicTestObject);
+		
+		// Add a folder with some custom manually-added items
+		gui.addFolder("Manually Added Items")
+		.addFunction(testObjectComplex.nullary_function, Util.getTypes(testObjectComplex.nullary_function), "Nullary Function")
+		.addFunction(testObjectComplex.unary_string_function, Util.getTypes(testObjectComplex.unary_string_function), "Unary Function")
+		.addFunction(testObjectComplex.binary_int_int_function, Util.getTypes(testObjectComplex.binary_int_int_function), "Binary Function")
+		.addStringSelect(testObjectComplex, "a_string", testObjectComplex.string_array, "String Select")
+		.addEnumSelect(testObjectComplex, "simple_enum", "Simple Enum Select")
+		.addEnumSelect(testObjectComplex, "complex_enum", "Complex Enum Select")
+		.addBooleanCheckbox(testObjectComplex, "a_bool", "Boolean Checkbox");
+		
+		// Add a folder with a single complex object
+		var folder:Folder = gui.addFolder("Automatic Complex Example")
+		.addObject(testObjectComplex);
+		
+		// Displays info about the first GUI
+		var guiInfo = GUI.create("tweak.gui.info");
+		
+		guiInfo.addFolderForObjectWatch(simpleObjectArray, "Simple Object Array Watch", 10)
+		.addFolderForObjectWatch(testObjectComplex, "Complex Object Watch", 10);
+		
+		var timer = new Timer(100);
+		timer.run = function() {
+			gui.update();
+			guiInfo.update();
+		}
+		
+		var watchUpdater = new Timer(1500);
+		watchUpdater.run = function() {
+			for (o in simpleObjectArray) {
+				o.updateValues();
+			}
+			testObjectComplex.updateValues();
+		}
+	}
+}
+
 enum SimpleEnum {
 	AN_ENUM_ITEM;
 	ANOTHER_ENUM_ITEM;
@@ -113,86 +204,5 @@ class ComplexTestObject {
 		simple_enum = Random.enumConstructor(SimpleEnum);
 		complex_enum = Random.enumConstructor(ComplexEnum);
 		// Ignore the rest for now...
-	}
-}
-
-class Main {
-    private static function main():Void {
-		// Create a GUI itself - the parent menu
-		var gui = GUI.create("tweak.gui");
-		
-		var simpleObjectArray = new Array<SimpleTestObject>();
-		for (i in 0...5) {
-			simpleObjectArray.push(new SimpleTestObject(false, Std.int(Math.random() * 10), Math.random() * 12, "Test", function() { trace("Basic Test Function" + i); }));
-		}
-		
-		var stringStack = new GenericStack<String>();
-		stringStack.add("Foo");
-		stringStack.add("Bar");
-		stringStack.add("Boz");
-		stringStack.add("Qux");
-		stringStack.add("Quux");
-		
-		var balancedTree = new BalancedTree<Int, String>();
-		balancedTree.set(0, "Foo");
-		balancedTree.set(1, "Bar");
-		balancedTree.set(2, "Baz");
-		balancedTree.set(3, "Boz");
-		
-		// Add a folder with a single simple object
-		var basicFolder = gui.addFolder("Simple Example");
-		basicFolder.addObject(new SimpleTestObject(true, 20, 50.2, "Qux", function () { trace("Basic Test Function"); }));
-		
-		var testObjectComplex = new ComplexTestObject(
-			true, false, true,
-			10, 20, 30,
-			5.5, 15.5, 25.5,
-			"Foo", "Bar", "Baz",
-			function() {}, function(s:String):Void { trace("Running: " + s); }, function(a:Int, b:Int) { trace("Running: " + a + "," + b); }, function(a:Int, b:SimpleTestObject, c:String) { trace("Running: " + a + "," + b + "," + c); },
-			SimpleEnum.AN_ENUM_ITEM, ComplexEnum.AN_ENUM_ITEM, EnumAbstract.foo,
-			Vector.fromArrayCopy([ 0, 1, 2, 3 ]), Vector.fromArrayCopy([ "Foo", "Bar", "Baz", "Boz" ]), Vector.fromArrayCopy(simpleObjectArray),
-			[ 0, 1, 2, 3 ], [ "Foo", "Bar", "Baz", "Boz" ], simpleObjectArray,
-			new SimpleTestObject(false, 20, 30, "Nested Test", function() { trace("Nested test"); } ),
-			[ "Foo" => "Bar", "Boz" => "Baz", "Qux" => "Quux", "Quuux" => "Quuuux", "LongString" => "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789" ],
-			[ 1 => "Foo", 2 => "Bar", 3 => "Boz", -23 => "Qux"],
-			[ simpleObjectArray[0] => "Foo", simpleObjectArray[1] => "Bar", simpleObjectArray[2] => "Baz" ],
-			[ SimpleEnum.AN_ENUM_ITEM => "Foo", SimpleEnum.ANOTHER_ENUM_ITEM => "Bar", SimpleEnum.ONE_MORE_ENUM_ITEM => "Boz" ],
-			stringStack,
-			{ x: 10, y: 25 },
-			balancedTree
-			);
-			
-		// Add a folder with some more custom manually-added items
-		gui.addFolder("Manually Added Items")
-		.addFunction(testObjectComplex.nullary_function, Util.getTypes(testObjectComplex.nullary_function), "Nullary Function")
-		.addFunction(testObjectComplex.unary_string_function, Util.getTypes(testObjectComplex.unary_string_function), "Unary Function")
-		.addFunction(testObjectComplex.binary_int_int_function, Util.getTypes(testObjectComplex.binary_int_int_function), "Binary Function")
-		.addStringSelect(testObjectComplex, "a_string", testObjectComplex.string_array, "String Select")
-		.addEnumSelect(testObjectComplex, "simple_enum", "Simple Enum Select")
-		.addEnumSelect(testObjectComplex, "complex_enum", "Complex Enum Select")
-		.addBooleanCheckbox(testObjectComplex, "a_bool", "Boolean Checkbox");
-		
-		// Add a folder with a single complex object
-		var folder:Folder = gui.addFolder("Automatic Complex Example")
-		.addObject(testObjectComplex);
-		
-		// Displays info about the first GUI
-		var guiInfo = GUI.create("tweak.gui.info");		
-		guiInfo.addFolderForObjectWatch(simpleObjectArray, "Simple Object Array Watch", 10);
-		guiInfo.addFolderForObjectWatch(testObjectComplex, "Complex Object Watch", 10);
-		
-		var timer = new Timer(100);
-		timer.run = function() {
-			gui.update();
-			guiInfo.update();
-		}
-		
-		var watchUpdater = new Timer(1500);
-		watchUpdater.run = function() {
-			for (o in simpleObjectArray) {
-				o.updateValues();
-			}
-			testObjectComplex.updateValues();
-		}
 	}
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<meta title="Tweak GUI Haxe UI Demo" package="tweak.gui.haxe.ui.demo" version="1.0.0" company="Sam Twidale" />
+	
+	<app main="Main" file="tweak-gui-haxe-ui-demo" path="haxeui" />
+	
+	<window background="#FFFFFF" fps="60" />
+	<window width="800" height="600" unless="mobile" />
+	
+	<haxelib name="openfl" />
+	<haxelib name="actuate" />
+	<haxelib name="haxeui" />
+	
+	<haxelib name="lazyprops" />
+	<haxelib name="random" />
+	
+	<haxedef name="haxeuibackend" />
+	<include path="lib" />
+</project>
