@@ -1274,6 +1274,7 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 	,getFields: function(object) {
 		if(!(object != null)) throw new js__$Boot_HaxeError("FAIL: object != null");
 		return Reflect.fields(object);
+		return [];
 	}
 	,__class__: tweak_elements_Folder
 });
@@ -1289,7 +1290,10 @@ tweak_GUI.create = function(name) {
 };
 tweak_GUI.__super__ = tweak_elements_Folder;
 tweak_GUI.prototype = $extend(tweak_elements_Folder.prototype,{
-	__class__: tweak_GUI
+	instantiateBackend: function() {
+		return new tweak_backend_dom_CustomDOMBackend();
+	}
+	,__class__: tweak_GUI
 });
 var tweak_backend_IBackend = function() { };
 tweak_backend_IBackend.__name__ = true;

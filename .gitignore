@@ -8,4 +8,5 @@ Thumbs.db
 *.class
 *.log
 *.js.map
+flixel/*
 haxeui/*

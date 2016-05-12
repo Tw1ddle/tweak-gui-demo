@@ -6,6 +6,6 @@
 -lib msignal
 -lib sure
 
--D customdombackend
+-D tweak_customdombackend
 
 -cp lib
