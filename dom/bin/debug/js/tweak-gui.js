@@ -1011,19 +1011,21 @@ msignal_SlotList.prototype = {
 	,__class__: msignal_SlotList
 	,__properties__: {get_length:"get_length"}
 };
-var tweak_elements_BaseElement = function(name) {
+var tweak_gui_BaseElement = function(name) {
 	if(name == null) name = "Unnamed Element";
 	this.name = name;
-	this.id = tweak_elements_BaseElement._id++;
+	this.id = tweak_gui_BaseElement._id++;
 };
-tweak_elements_BaseElement.__name__ = true;
-tweak_elements_BaseElement.nextId = function() {
-	return tweak_elements_BaseElement._id++;
+tweak_gui_BaseElement.__name__ = true;
+tweak_gui_BaseElement.nextId = function() {
+	return tweak_gui_BaseElement._id++;
 };
-tweak_elements_BaseElement.prototype = {
-	__class__: tweak_elements_BaseElement
+tweak_gui_BaseElement.prototype = {
+	update: function() {
+	}
+	,__class__: tweak_gui_BaseElement
 };
-var tweak_elements_Folder = function(name,parent) {
+var tweak_gui_Folder = function(name,parent) {
 	this.signal_didClose = new msignal_Signal1();
 	this.signal_didOpen = new msignal_Signal1();
 	this.signal_didRemoveProperty = new msignal_Signal2();
@@ -1031,7 +1033,7 @@ var tweak_elements_Folder = function(name,parent) {
 	this.signal_didRemoveFolder = new msignal_Signal2();
 	this.signal_didAddFolder = new msignal_Signal2();
 	this.signal_didUpdate = new msignal_Signal1();
-	tweak_elements_BaseElement.call(this,name);
+	tweak_gui_BaseElement.call(this,name);
 	if(parent != null) {
 		this.parent = parent;
 		this.backend = parent.backend;
@@ -1039,12 +1041,12 @@ var tweak_elements_Folder = function(name,parent) {
 	this.folders = [];
 	this.properties = [];
 };
-tweak_elements_Folder.__name__ = true;
-tweak_elements_Folder.verifyField = function(object,field) {
+tweak_gui_Folder.__name__ = true;
+tweak_gui_Folder.verifyField = function(object,field) {
 	return object != null && Object.prototype.hasOwnProperty.call(object,field);
 };
-tweak_elements_Folder.__super__ = tweak_elements_BaseElement;
-tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
+tweak_gui_Folder.__super__ = tweak_gui_BaseElement;
+tweak_gui_Folder.prototype = $extend(tweak_gui_BaseElement.prototype,{
 	update: function() {
 		var _g = 0;
 		var _g1 = this.properties;
@@ -1064,14 +1066,6 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		}
 		this.signal_didUpdate.dispatch(this);
 	}
-	,show: function() {
-		this.backend.show(this);
-		return this;
-	}
-	,hide: function() {
-		this.backend.hide(this);
-		return this;
-	}
 	,open: function() {
 		this.backend.openFolder(this);
 		this.signal_didOpen.dispatch(this);
@@ -1082,10 +1076,17 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		this.signal_didClose.dispatch(this);
 		return this;
 	}
-	,addFolder: function(name,updateWhenClosed) {
-		if(updateWhenClosed == null) updateWhenClosed = true;
+	,show: function() {
+		this.backend.show(this);
+		return this;
+	}
+	,hide: function() {
+		this.backend.hide(this);
+		return this;
+	}
+	,addFolder: function(name) {
 		if(!(name != null && name.length > 0)) throw new js__$Boot_HaxeError("FAIL: name != null && name.length > 0");
-		var folder = new tweak_elements_Folder(name,this);
+		var folder = new tweak_gui_Folder(name,this);
 		this.folders.push(folder);
 		var added = this.backend.addFolder(folder);
 		if(!added) throw new js__$Boot_HaxeError("FAIL: added");
@@ -1258,7 +1259,7 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 	,makeProperty: function(object,field,name) {
 		if(!(object != null)) throw new js__$Boot_HaxeError("FAIL: object != null");
 		if(!(field != null)) throw new js__$Boot_HaxeError("FAIL: field != null");
-		var property = new tweak_elements_Property(object,field,name);
+		var property = new tweak_gui_Property(object,field,name);
 		this.properties.push(property);
 		this.signal_didAddProperty.dispatch(this,property);
 		return property;
@@ -1266,7 +1267,7 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 	,makeFunctionProperty: function(func,parameterTypes,name) {
 		if(!(func != null)) throw new js__$Boot_HaxeError("FAIL: func != null");
 		if(!(parameterTypes != null)) throw new js__$Boot_HaxeError("FAIL: parameterTypes != null");
-		var property = new tweak_elements_FunctionProperty(func,parameterTypes,name);
+		var property = new tweak_gui_FunctionProperty(func,parameterTypes,name);
 		this.properties.push(property);
 		this.signal_didAddProperty.dispatch(this,property);
 		return property;
@@ -1276,10 +1277,10 @@ tweak_elements_Folder.prototype = $extend(tweak_elements_BaseElement.prototype,{
 		return Reflect.fields(object);
 		return [];
 	}
-	,__class__: tweak_elements_Folder
+	,__class__: tweak_gui_Folder
 });
 var tweak_GUI = function(name) {
-	tweak_elements_Folder.call(this,name,null);
+	tweak_gui_Folder.call(this,name,null);
 	this.backend = new tweak_backend_dom_CustomDOMBackend();
 	this.backend.addFolder(this);
 };
@@ -1288,8 +1289,8 @@ tweak_GUI.create = function(name) {
 	if(!(name != null)) throw new js__$Boot_HaxeError("FAIL: name != null");
 	return new tweak_GUI(name);
 };
-tweak_GUI.__super__ = tweak_elements_Folder;
-tweak_GUI.prototype = $extend(tweak_elements_Folder.prototype,{
+tweak_GUI.__super__ = tweak_gui_Folder;
+tweak_GUI.prototype = $extend(tweak_gui_Folder.prototype,{
 	instantiateBackend: function() {
 		return new tweak_backend_dom_CustomDOMBackend();
 	}
@@ -1408,40 +1409,6 @@ tweak_backend_dom_CustomDOMBackend.prototype = {
 	}
 	,addFunctionActivator: function(property,container) {
 		var id = property.name + "-" + Std.string(_$UInt_UInt_$Impl_$.toFloat(property.id));
-		var _g1 = 0;
-		var _g = property.parameters.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			container.appendChild((function($this) {
-				var $r;
-				var _g2 = property.parameters.charAt(i);
-				$r = (function($this) {
-					var $r;
-					switch(_g2) {
-					case "b":
-						$r = $this.createCheckbox(property);
-						break;
-					case "f":
-						$r = $this.createNumericSpinbox(property);
-						break;
-					case "i":
-						$r = $this.createNumericSpinbox(property);
-						break;
-					case "s":
-						$r = $this.createStringEdit(property);
-						break;
-					default:
-						$r = (function($this) {
-							var $r;
-							throw new js__$Boot_HaxeError("Unsupported parameter type");
-							return $r;
-						}($this));
-					}
-					return $r;
-				}($this));
-				return $r;
-			}(this)));
-		}
 		var buttonElement;
 		var _this = window.document;
 		buttonElement = _this.createElement("button");
@@ -1781,24 +1748,26 @@ tweak_backend_dom_CustomDOMBackend.prototype = {
 	}
 	,__class__: tweak_backend_dom_CustomDOMBackend
 };
-var tweak_elements_IProperty = function() { };
-tweak_elements_IProperty.__name__ = true;
-tweak_elements_IProperty.prototype = {
-	__class__: tweak_elements_IProperty
-	,__properties__: {set_value:"set_value",get_value:"get_value"}
+var tweak_gui_BaseProperty = function(name) {
+	tweak_gui_BaseElement.call(this,name);
+	this.signal_changed = new msignal_Signal2();
 };
-var tweak_elements_FunctionProperty = function(func,parameters,name) {
+tweak_gui_BaseProperty.__name__ = true;
+tweak_gui_BaseProperty.__super__ = tweak_gui_BaseElement;
+tweak_gui_BaseProperty.prototype = $extend(tweak_gui_BaseElement.prototype,{
+	__class__: tweak_gui_BaseProperty
+});
+var tweak_gui_FunctionProperty = function(func,parameters,name) {
 	if(!(func != null)) throw new js__$Boot_HaxeError("FAIL: func != null");
 	if(!(parameters != null)) throw new js__$Boot_HaxeError("FAIL: parameters != null");
-	if(name == null) tweak_elements_BaseElement.call(this,(parameters.length == null?"null":"" + parameters.length) + "-ary Function"); else tweak_elements_BaseElement.call(this,name);
+	if(name == null) tweak_gui_BaseProperty.call(this,(parameters.length == null?"null":"" + parameters.length) + "-ary Function"); else tweak_gui_BaseProperty.call(this,name);
 	this.signal_changed = new msignal_Signal2();
 	this.parameters = parameters;
 	this.set_value(func);
 };
-tweak_elements_FunctionProperty.__name__ = true;
-tweak_elements_FunctionProperty.__interfaces__ = [tweak_elements_IProperty];
-tweak_elements_FunctionProperty.__super__ = tweak_elements_BaseElement;
-tweak_elements_FunctionProperty.prototype = $extend(tweak_elements_BaseElement.prototype,{
+tweak_gui_FunctionProperty.__name__ = true;
+tweak_gui_FunctionProperty.__super__ = tweak_gui_BaseProperty;
+tweak_gui_FunctionProperty.prototype = $extend(tweak_gui_BaseProperty.prototype,{
 	update: function() {
 	}
 	,get_value: function() {
@@ -1810,22 +1779,20 @@ tweak_elements_FunctionProperty.prototype = $extend(tweak_elements_BaseElement.p
 		this.signal_changed.dispatch(tmp,v);
 		return this.get_value();
 	}
-	,__class__: tweak_elements_FunctionProperty
+	,__class__: tweak_gui_FunctionProperty
 	,__properties__: {set_value:"set_value",get_value:"get_value"}
 });
-var tweak_elements_Property = function(object,field,name) {
+var tweak_gui_Property = function(object,field,name) {
 	if(!(object != null)) throw new js__$Boot_HaxeError("FAIL: object != null");
 	if(!(field != null)) throw new js__$Boot_HaxeError("FAIL: field != null");
-	if(name == null) tweak_elements_BaseElement.call(this,field); else tweak_elements_BaseElement.call(this,name);
+	if(name == null) tweak_gui_BaseProperty.call(this,field); else tweak_gui_BaseProperty.call(this,name);
 	this.object = object;
 	this.field = field;
-	this.signal_changed = new msignal_Signal2();
 	this.lastValue = this.get_value();
 };
-tweak_elements_Property.__name__ = true;
-tweak_elements_Property.__interfaces__ = [tweak_elements_IProperty];
-tweak_elements_Property.__super__ = tweak_elements_BaseElement;
-tweak_elements_Property.prototype = $extend(tweak_elements_BaseElement.prototype,{
+tweak_gui_Property.__name__ = true;
+tweak_gui_Property.__super__ = tweak_gui_BaseProperty;
+tweak_gui_Property.prototype = $extend(tweak_gui_BaseProperty.prototype,{
 	update: function() {
 		if(this.object == null) return;
 		if(this.lastValue != Reflect.getProperty(this.object,this.field)) {
@@ -1843,7 +1810,7 @@ tweak_elements_Property.prototype = $extend(tweak_elements_BaseElement.prototype
 		Reflect.setProperty(this.object,this.field,v);
 		return v;
 	}
-	,__class__: tweak_elements_Property
+	,__class__: tweak_gui_Property
 	,__properties__: {set_value:"set_value",get_value:"get_value"}
 });
 var tweak_util_Util = function() { };
@@ -1868,7 +1835,7 @@ var __map_reserved = {}
 msignal_SlotList.NIL = new msignal_SlotList(null,null);
 haxe_ds_ObjectMap.count = 0;
 js_Boot.__toStr = {}.toString;
-tweak_elements_BaseElement._id = 0;
+tweak_gui_BaseElement._id = 0;
 Main.main();
 })(typeof console != "undefined" ? console : {log:function(){}}, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 

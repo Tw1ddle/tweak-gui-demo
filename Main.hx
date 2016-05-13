@@ -10,7 +10,7 @@ import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
 import haxe.ds.Vector;
 import tweak.GUI;
-import tweak.elements.Folder;
+import tweak.gui.Folder;
 import tweak.util.Util;
 
 // A cross-platform demo of tweak-gui
