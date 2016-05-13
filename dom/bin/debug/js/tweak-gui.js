@@ -71,7 +71,7 @@ Main.main = function() {
 		console.log("Running: " + a + "," + b);
 	},function(a1,b1,c) {
 		console.log("Running: " + a1 + "," + Std.string(b1) + "," + c);
-	},SimpleEnum.AN_ENUM_ITEM,ComplexEnum.AN_ENUM_ITEM,"foo",(function($this) {
+	},FlatEnum.AN_ENUM_ITEM,ComplexEnum.AN_ENUM_ITEM,"foo",(function($this) {
 		var $r;
 		var array = [0,1,2,3];
 		var vec;
@@ -159,9 +159,9 @@ Main.main = function() {
 	}(this)),(function($this) {
 		var $r;
 		var _g31 = new haxe_ds_EnumValueMap();
-		_g31.set(SimpleEnum.AN_ENUM_ITEM,"Foo");
-		_g31.set(SimpleEnum.ANOTHER_ENUM_ITEM,"Bar");
-		_g31.set(SimpleEnum.ONE_MORE_ENUM_ITEM,"Boz");
+		_g31.set(FlatEnum.AN_ENUM_ITEM,"Foo");
+		_g31.set(FlatEnum.ANOTHER_ENUM_ITEM,"Bar");
+		_g31.set(FlatEnum.ONE_MORE_ENUM_ITEM,"Boz");
 		$r = _g31;
 		return $r;
 	}(this)),stringStack,{ x : 10, y : 25},balancedTree);
@@ -169,15 +169,14 @@ Main.main = function() {
 	var basicFolder = gui.addFolder("Simple Example").addObject(basicTestObject);
 	gui.addFolder("Manually Added Items").addFunction(testObjectComplex.nullary_function,"","Nullary Function").addFunction(testObjectComplex.unary_string_function,"s","Unary Function").addFunction(testObjectComplex.binary_int_int_function,"ii","Binary Function").addStringSelect(testObjectComplex,"a_string",testObjectComplex.string_array,"String Select").addEnumSelect(testObjectComplex,"simple_enum","Simple Enum Select").addEnumSelect(testObjectComplex,"complex_enum","Complex Enum Select").addBooleanCheckbox(testObjectComplex,"a_bool","Boolean Checkbox");
 	var folder = gui.addFolder("Automatic Complex Example").addObject(testObjectComplex);
-	var guiInfo = tweak_GUI.create("tweak.gui.info");
-	guiInfo.addFolderForObjectWatch(simpleObjectArray,"Simple Object Array Watch",10).addFolderForObjectWatch(testObjectComplex,"Complex Object Watch",10);
+	var guiInfo = tweak_GUI.create("tweak.gui.info").addFolderForObjectWatch(simpleObjectArray,"Simple Object Array Watch",10).addFolderForObjectWatch(testObjectComplex,"Complex Object Watch",10);
 	var timer = new haxe_Timer(100);
 	timer.run = function() {
 		gui.update();
 		guiInfo.update();
 	};
-	var watchUpdater = new haxe_Timer(1500);
-	watchUpdater.run = function() {
+	var valueUpdater = new haxe_Timer(1500);
+	valueUpdater.run = function() {
 		var _g41 = 0;
 		while(_g41 < simpleObjectArray.length) {
 			var o = simpleObjectArray[_g41];
@@ -187,20 +186,20 @@ Main.main = function() {
 		testObjectComplex.updateValues();
 	};
 };
-var SimpleEnum = { __ename__ : true, __constructs__ : ["AN_ENUM_ITEM","ANOTHER_ENUM_ITEM","YET_ANOTHER_ENUM_ITEM","ONE_MORE_ENUM_ITEM"] };
-SimpleEnum.AN_ENUM_ITEM = ["AN_ENUM_ITEM",0];
-SimpleEnum.AN_ENUM_ITEM.toString = $estr;
-SimpleEnum.AN_ENUM_ITEM.__enum__ = SimpleEnum;
-SimpleEnum.ANOTHER_ENUM_ITEM = ["ANOTHER_ENUM_ITEM",1];
-SimpleEnum.ANOTHER_ENUM_ITEM.toString = $estr;
-SimpleEnum.ANOTHER_ENUM_ITEM.__enum__ = SimpleEnum;
-SimpleEnum.YET_ANOTHER_ENUM_ITEM = ["YET_ANOTHER_ENUM_ITEM",2];
-SimpleEnum.YET_ANOTHER_ENUM_ITEM.toString = $estr;
-SimpleEnum.YET_ANOTHER_ENUM_ITEM.__enum__ = SimpleEnum;
-SimpleEnum.ONE_MORE_ENUM_ITEM = ["ONE_MORE_ENUM_ITEM",3];
-SimpleEnum.ONE_MORE_ENUM_ITEM.toString = $estr;
-SimpleEnum.ONE_MORE_ENUM_ITEM.__enum__ = SimpleEnum;
-SimpleEnum.__empty_constructs__ = [SimpleEnum.AN_ENUM_ITEM,SimpleEnum.ANOTHER_ENUM_ITEM,SimpleEnum.YET_ANOTHER_ENUM_ITEM,SimpleEnum.ONE_MORE_ENUM_ITEM];
+var FlatEnum = { __ename__ : true, __constructs__ : ["AN_ENUM_ITEM","ANOTHER_ENUM_ITEM","YET_ANOTHER_ENUM_ITEM","ONE_MORE_ENUM_ITEM"] };
+FlatEnum.AN_ENUM_ITEM = ["AN_ENUM_ITEM",0];
+FlatEnum.AN_ENUM_ITEM.toString = $estr;
+FlatEnum.AN_ENUM_ITEM.__enum__ = FlatEnum;
+FlatEnum.ANOTHER_ENUM_ITEM = ["ANOTHER_ENUM_ITEM",1];
+FlatEnum.ANOTHER_ENUM_ITEM.toString = $estr;
+FlatEnum.ANOTHER_ENUM_ITEM.__enum__ = FlatEnum;
+FlatEnum.YET_ANOTHER_ENUM_ITEM = ["YET_ANOTHER_ENUM_ITEM",2];
+FlatEnum.YET_ANOTHER_ENUM_ITEM.toString = $estr;
+FlatEnum.YET_ANOTHER_ENUM_ITEM.__enum__ = FlatEnum;
+FlatEnum.ONE_MORE_ENUM_ITEM = ["ONE_MORE_ENUM_ITEM",3];
+FlatEnum.ONE_MORE_ENUM_ITEM.toString = $estr;
+FlatEnum.ONE_MORE_ENUM_ITEM.__enum__ = FlatEnum;
+FlatEnum.__empty_constructs__ = [FlatEnum.AN_ENUM_ITEM,FlatEnum.ANOTHER_ENUM_ITEM,FlatEnum.YET_ANOTHER_ENUM_ITEM,FlatEnum.ONE_MORE_ENUM_ITEM];
 var ComplexEnum = { __ename__ : true, __constructs__ : ["AN_ENUM_ITEM","ANOTHER_ENUM_ITEM","YET_ANOTHER_ENUM_ITEM","ONE_MORE_ENUM_ITEM","AND_ONE_MORE_ENUM_ITEM"] };
 ComplexEnum.AN_ENUM_ITEM = ["AN_ENUM_ITEM",0];
 ComplexEnum.AN_ENUM_ITEM.toString = $estr;
@@ -282,7 +281,7 @@ ComplexTestObject.prototype = {
 		this.a_string = Random.string(10,"aeiou");
 		this.b_string = Random.string(15);
 		this.c_string = Random.string(1);
-		this.simple_enum = Random.enumConstructor(SimpleEnum);
+		this.simple_enum = Random.enumConstructor(FlatEnum);
 		this.complex_enum = Random.enumConstructor(ComplexEnum);
 	}
 	,__class__: ComplexTestObject
