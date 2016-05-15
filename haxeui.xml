@@ -15,5 +15,6 @@
 	<haxelib name="random" />
 	
 	<haxedef name="tweak_haxeuibackend" />
+	<!-- haxelib include="tweak-gui" /> -->
 	<include path="lib" />
 </project>

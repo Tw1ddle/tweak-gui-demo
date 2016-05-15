@@ -10,7 +10,6 @@ import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
 import haxe.ds.Vector;
 import tweak.GUI;
-import tweak.gui.Folder;
 import tweak.util.Util;
 
 /**
@@ -62,38 +61,69 @@ class Main {
 			{ x: 10, y: 25 },
 			balancedTree
 		);
+		
+		// Create a test object that takes type parameters
+		var testObjectGeneric = new GenericTestObject<Bool, Int, Float, String, SimpleTestObject>(
+			false,
+			20,
+			10.5,
+			"Foo",
+			new SimpleTestObject(false, 0, 10, "Bar", function() { trace("Test"); }),
+			[ false, true, false, true ],
+			[ 0, 1, 2, 3 ],
+			[ -2.2, -0.5, 0.0, 0.6, 1.0, 2.0 ],
+			[ "Foo", "Bar", "Baz", "Boz" ],
+			[ new SimpleTestObject(true, 10, 0.5, "Foo", function() { trace("Test"); }) ]
+		);
 			
-		// Create the main GUI itself
-		var gui = GUI.create("tweak.gui");
+		var guiSimple = GUI.create("tweak.gui.simple");
 		
 		// Add a folder with a single simple object
-		var basicFolder = gui.addFolder("Simple Example")
+		guiSimple.addFolder("Simple Example")
 		.addObject(basicTestObject);
 		
+		// Add a folder with a generic object
+		guiSimple.addFolder("Generic Example")
+		.addObject(testObjectGeneric);
+		
+		// Add a folder with a single complex object
+		guiSimple.addFolder("Automatic Complex Example")
+		.addObject(testObjectComplex);
+		
+		var guiMacroGuided = GUI.create("tweak.gui.macroguided");
+		
+		// Add a folder with a single simple object using macros
+		guiMacroGuided.addFolder("Simple Example")
+		.addObjectIncludingFields(basicTestObject, Util.getInstanceFieldNames(basicTestObject));
+		
+		// Add a folder with a generic object
+		guiMacroGuided.addFolder("Generic Example")
+		.addObjectIncludingFields(testObjectGeneric, Util.getInstanceFieldNames(testObjectGeneric));
+		
+		// Add a folder with a single complex object
+		guiMacroGuided.addFolder("Automatic Complex Example")
+		.addObjectIncludingFields(testObjectComplex, Util.getInstanceFieldNames(testObjectComplex));
+		
+		var guiWatches = GUI.create("tweak.gui.watches")
+		.addFolderForObjectWatch(simpleObjectArray, "Simple Object Array Watch", 10)
+		.addFolderForObjectWatch(testObjectComplex, "Complex Object Watch", 10);
+		
 		// Add a folder with some custom, manually-added items
-		gui.addFolder("Manually Added Items")
-		.addFunction(testObjectComplex.nullary_function, Util.getTypes(testObjectComplex.nullary_function), "Nullary Function")
-		.addFunction(testObjectComplex.unary_string_function, Util.getTypes(testObjectComplex.unary_string_function), "Unary Function")
-		.addFunction(testObjectComplex.binary_int_int_function, Util.getTypes(testObjectComplex.binary_int_int_function), "Binary Function")
+		GUI.create("tweak.gui.manual")
+		.addFolder("Manually Added Items")
+		.addFunction(testObjectComplex.nullary_function, Util.getFunctionSignature(testObjectComplex.nullary_function), "Nullary Function")
+		.addFunction(testObjectComplex.unary_string_function, Util.getFunctionSignature(testObjectComplex.unary_string_function), "Unary Function")
+		.addFunction(testObjectComplex.binary_int_int_function, Util.getFunctionSignature(testObjectComplex.binary_int_int_function), "Binary Function")
 		.addStringSelect(testObjectComplex, "a_string", testObjectComplex.string_array, "String Select")
 		.addEnumSelect(testObjectComplex, "simple_enum", "Simple Enum Select")
 		.addEnumSelect(testObjectComplex, "complex_enum", "Complex Enum Select")
 		.addBooleanCheckbox(testObjectComplex, "a_bool", "Boolean Checkbox");
 		
-		// Add a folder with a single complex object
-		var folder:Folder = gui.addFolder("Automatic Complex Example")
-		.addObject(testObjectComplex);
-		
-		// Create a GUI to display info about the first GUI
-		var guiInfo = GUI.create("tweak.gui.info")
-		.addFolderForObjectWatch(simpleObjectArray, "Simple Object Array Watch", 10)
-		.addFolderForObjectWatch(testObjectComplex, "Complex Object Watch", 10);
-		
 		// Update the GUIs
 		var timer = new Timer(100);
 		timer.run = function() {
-			gui.update();
-			guiInfo.update();
+			guiSimple.update();
+			guiWatches.update();
 		}
 		
 		// Update the values of some of the test variables
@@ -163,6 +193,28 @@ class SimpleTestObject {
 }
 
 /**
+ * A generic test object
+ */
+@:build(LazyProps.build())
+@:generic
+class GenericTestObject<A, B, C, D, E> {
+	@:propPublic('*')
+	public function new(
+		generic_a:A,
+		generic_b:B,
+		generic_c:C,
+		generic_d:D,
+		generic_e:E,
+		generic_array_a:Array<A>,
+		generic_array_b:Array<B>,
+		generic_array_c:Array<C>,
+		generic_array_d:Array<D>,
+		generic_array_e:Array<E>
+	)
+	{}
+}
+ 
+/**
  * A more complicated test class.
  */
 @:build(LazyProps.build())
@@ -219,9 +271,13 @@ class ComplexTestObject {
 		a_string = Random.string(10, "aeiou");
 		b_string = Random.string(15);
 		c_string = Random.string(1);
-		// Ignore functions
+		nullary_function = function() {};
+		unary_string_function = function(s:String) {};
+		binary_int_int_function = function(a:Int, b:Int) {};
+		ternary_int_object_string_function = function(a:Int, o:SimpleTestObject, s:String) {};
 		simple_enum = Random.enumConstructor(FlatEnum);
 		complex_enum = Random.enumConstructor(ComplexEnum);
+		enum_string_abstract = EnumAbstract.foo;
 		// Ignore the rest for now...
 	}
 }

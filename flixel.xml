@@ -38,6 +38,7 @@
 	<haxelib name="random" />
 	
 	<haxedef name="tweak_flixelbackend" />
+	<!-- haxelib include="tweak-gui" /> -->
 	<include path="lib" />
 
 	<haxelib name="flixel-ui" />

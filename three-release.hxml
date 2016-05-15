@@ -1,0 +1,3 @@
+--no-traces
+
+-js three/bin/release/js/tweak-gui.js
