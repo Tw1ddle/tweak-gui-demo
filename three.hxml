@@ -5,7 +5,9 @@
 
 -lib msignal
 -lib sure
+-lib threejs
 
 -D tweak_threejsbackend
 
+#-lib tweak-gui
 -cp lib

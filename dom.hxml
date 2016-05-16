@@ -8,4 +8,5 @@
 
 -D tweak_customdombackend
 
+#-lib tweak-gui
 -cp lib

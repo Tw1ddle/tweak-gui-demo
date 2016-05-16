@@ -12,10 +12,19 @@ import haxe.ds.Vector;
 import tweak.GUI;
 import tweak.util.Util;
 
+#if tweak_threejsbackend
+import js.three.Object3D;
+import js.three.Scene;
+import js.three.WebGLRenderer;
+import js.three.PerspectiveCamera;
+import js.Browser.window;
+import js.Browser;
+#end
+
 /**
  * A cross-platform demo for tweak-gui.
  */
-class Main {
+class Main {	
     private static function main():Void {		
 		// Start by creating some objects to add to the GUI
 		// Create a single basic test object
@@ -134,6 +143,21 @@ class Main {
 			}
 			testObjectComplex.updateValues();
 		}
+		
+		#if tweak_threejsbackend
+		var renderer = new WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		var scene = new Scene();
+		var camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1.0, 10000.0);
+		var attachPoint = Browser.document.getElementById("tweak-gui-scene");
+		attachPoint.appendChild(renderer.domElement);
+		var animate = null;
+		animate = function(t:Float):Void {
+			renderer.render(scene, camera);
+			window.requestAnimationFrame(animate);
+		}
+		window.requestAnimationFrame(animate);
+		#end
 	}
 }
 
